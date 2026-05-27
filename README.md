@@ -8,7 +8,7 @@ Each skill lives in its own directory with a `SKILL.md` file. The agent reads th
 
 | Skill | Description | Triggers |
 |-------|-------------|----------|
-| [crap-analysis](./crap-analysis/) | Full CRAP (Change Risk Anti-Patterns) analysis combined with Uncle Bob / Clean Code review. Flags risky methods and suggests prioritized refactors. | `crap`, `crab`, `analyze crap`, `risk analysis`, `clean code review` |
+| [crap-analysis](./crap-analysis/) | Full CRAP (Change Risk Anti-Patterns) analysis combined with Uncle Bob / Clean Code review. Flags risky methods and suggests prioritized refactors. Assumes 0% coverage when not provided. | `crap`, `crab`, `analyze crap`, `risk analysis`, `clean code review` |
 
 ## Installation
 
