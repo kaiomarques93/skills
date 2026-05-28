@@ -9,6 +9,7 @@ Each skill lives in its own directory with a `SKILL.md` file. The agent reads th
 | Skill | Description | Triggers |
 |-------|-------------|----------|
 | [crap-analysis](./crap-analysis/) | Full CRAP (Change Risk Anti-Patterns) analysis combined with Uncle Bob / Clean Code review. Flags risky methods and suggests prioritized refactors. Assumes 0% coverage when not provided. | `crap`, `crab`, `analyze crap`, `risk analysis`, `clean code review` |
+| [guide](./guide/) | Guides the user step-by-step through any unfamiliar procedure (AWS, Play Store, App Store, Terraform, etc.), reading the codebase for context, waiting for confirmation before each step, and troubleshooting inline when something fails. | `guide me through`, `walk me through`, `step by step`, `teach me how to` |
 
 ## Installation
 
@@ -51,6 +52,8 @@ See Cursor's [skill authoring guide](https://cursor.com/docs/context/skills) for
 ```
 skills/
 ├── README.md
-└── crap-analysis/
+├── crap-analysis/
+│   └── SKILL.md
+└── guide/
     └── SKILL.md
 ```
