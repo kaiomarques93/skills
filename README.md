@@ -10,7 +10,7 @@ Each skill lives in its own directory with a `SKILL.md` file. The agent reads th
 |-------|-------------|----------|
 | [crap-analysis](./crap-analysis/) | Full CRAP (Change Risk Anti-Patterns) analysis combined with Uncle Bob / Clean Code review. Flags risky methods and suggests prioritized refactors. Assumes 0% coverage when not provided. | `crap`, `crab`, `analyze crap`, `risk analysis`, `clean code review` |
 | [guide](./guide/) | Guides the user step-by-step through any unfamiliar procedure (AWS, Play Store, App Store, Terraform, etc.), reading the codebase for context, waiting for confirmation before each step, and troubleshooting inline when something fails. | `guide me through`, `walk me through`, `step by step`, `teach me how to` |
-| [ralph](./ralph/) | Autonomous dev loop — picks the next ready-for-agent GitHub issue, implements it with TDD, runs a CodeRabbit review, applies findings, then grills the design before committing. | `/ralph`, `run ralph`, `ralph loop`, `autonomous dev loop` |
+| [ralph](./ralph/) | Autonomous dev loop — picks the next ready-for-agent GitHub issue, implements it with TDD, runs a CodeRabbit review, applies findings, grills the design, verifies requirements, commits, and closes the issue when satisfied. | `/ralph`, `run ralph`, `ralph loop`, `autonomous dev loop` |
 
 ## Installation
 

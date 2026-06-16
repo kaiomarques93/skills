@@ -1,6 +1,6 @@
 ---
 name: ralph
-description: Autonomous dev loop — picks the next ready-for-agent GitHub issue, implements it on the current branch using TDD, runs CodeRabbit CLI review on uncommitted changes, applies findings, then grills the design with /grill-me before committing.
+description: Autonomous dev loop — picks the next ready-for-agent GitHub issue, implements it on the current branch using TDD, runs CodeRabbit CLI review on uncommitted changes, applies findings, grills the design, verifies the issue requirements, commits, and closes the issue when satisfied.
 triggers: ["/ralph", "run ralph", "ralph loop", "autonomous dev loop"]
 ---
 
@@ -55,7 +55,27 @@ coderabbit review --agent --type uncommitted
 
 Read ~/.agents/skills/grill-me/SKILL.md and follow those instructions verbatim, applied to your implementation. Interview yourself (and the user if needed) relentlessly about every design decision, edge case, and assumption. Resolve every open branch before proceeding.
 
-## Step 7 — Commit
+## Step 7 — Acceptance audit
+
+Before committing, audit the implementation against the issue contract.
+
+Treat the authoritative requirements as:
+- the agent brief, if one exists in the issue comments
+- otherwise the issue body and clarifying comments
+
+Produce a short checklist mapping each requirement to concrete evidence:
+- code changed
+- tests added or updated
+- commands run and their results
+- manual verification, if relevant
+
+Decision:
+- If every requirement is met, continue to commit and close the issue.
+- If a requirement is not met but can be fixed now, return to Step 3 and continue the loop.
+- If a requirement cannot be met in this run, do **not** commit or close the issue. Report the unmet requirement, the blocker, current worktree state, and the next action needed.
+- If the implementation reveals an out-of-scope problem, decide whether it needs a new issue. Do not expand the current issue unless it is necessary to satisfy the original requirements.
+
+## Step 8 — Commit
 
 Once grilling is complete and all concerns are addressed:
 - Stage the relevant files (no .env, no secrets, no unrelated changes)
@@ -65,9 +85,39 @@ Once grilling is complete and all concerns are addressed:
 git commit -m "$(cat <<'EOF'
 <concise why-focused message for the issue>
 
-Closes #<number>
+Refs #<number>
 EOF
 )"
 ```
 
-Report what was implemented, what CodeRabbit flagged and how it was handled, and what grilling surfaced.
+## Step 9 — Close the issue
+
+Close the issue only after the acceptance audit passes and the commit succeeds.
+
+```
+gh issue close <number> --comment "$(cat <<'EOF'
+Implemented and verified.
+
+Acceptance audit:
+- <requirement>: met by <evidence>
+- <requirement>: met by <evidence>
+
+Verification:
+- <command>: <result>
+
+Follow-up issues:
+- <none, or describe the out-of-scope problem and why it should become a new issue>
+EOF
+)"
+```
+
+## Step 10 — Final report
+
+Tell the user:
+- whether the issue requirements were met
+- whether the issue was closed
+- what was implemented
+- what tests and checks passed
+- what CodeRabbit flagged and how it was handled
+- what grilling surfaced
+- whether any out-of-scope problem needs a new issue
