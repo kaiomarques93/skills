@@ -61,7 +61,7 @@ coderabbit review --agent --type uncommitted
 
 If CodeRabbit completes within 25 minutes: parse the structured findings output and apply them as described below.
 
-If CodeRabbit does not complete within 25 minutes: do not abort the run. Continue to Step 5 immediately, but record `CodeRabbit: timed out — review did not complete` in the Step 6 acceptance audit and Step 9 final report.
+If CodeRabbit does not complete within 25 minutes: do not abort the run. Continue to Step 5 immediately, but record `CodeRabbit: timed out — review did not complete` in the Step 9 final report.
 
 ### Apply findings
 
@@ -82,70 +82,17 @@ coderabbit review --agent --type uncommitted
 
 Read `~/.agents/skills/grill-me/SKILL.md` and follow those instructions verbatim, applied to your implementation. Interview yourself (and the user if needed) relentlessly about every design decision, edge case, and assumption. Resolve every open branch before proceeding.
 
-## Step 6 — Acceptance audit
+## Step 6 — Ship it
 
-Before committing, audit the implementation against the issue contract.
+Read `~/.agents/skills/ship-it/SKILL.md` and follow those instructions verbatim. When returning to Step 3 to fix a failing requirement, continue the loop from there.
 
-Treat the authoritative requirements as:
-- the agent brief, if one exists in the issue comments
-- otherwise the issue body and clarifying comments
-
-Produce a short checklist mapping each requirement to concrete evidence:
-- code changed
-- tests added or updated
-- commands run and their results
-- manual verification, if relevant
-- CodeRabbit: completed and findings applied, timed out, or skipped (with reason)
-
-Decision:
-- If every requirement is met, continue to commit and close the issue.
-- If a requirement is not met but can be fixed now, return to Step 3 and continue the loop.
-- If a requirement cannot be met in this run, do **not** commit or close the issue. Report the unmet requirement, the blocker, current worktree state, and the next action needed.
-- If the implementation reveals an out-of-scope problem, decide whether it needs a new issue. Do not expand the current issue unless it is necessary to satisfy the original requirements.
-
-## Step 7 — Commit
-
-Once all active steps are complete and all concerns are addressed:
-- Stage the relevant files (no .env, no secrets, no unrelated changes)
-- Commit with a message that explains **why**, not just what
-
-```
-git commit -m "$(cat <<'EOF'
-<concise why-focused message for the issue>
-
-Refs #<number>
-EOF
-)"
-```
-
-## Step 8 — Close the issue
-
-Close the issue only after the acceptance audit passes and the commit succeeds.
-
-```
-gh issue close <number> --comment "$(cat <<'EOF'
-Implemented and verified.
-
-Acceptance audit:
-- <requirement>: met by <evidence>
-- <requirement>: met by <evidence>
-
-Verification:
-- <command>: <result>
-
-Follow-up issues:
-- <none, or describe the out-of-scope problem and why it should become a new issue>
-EOF
-)"
-```
-
-## Step 9 — Final report
+## Step 7 — Final report
 
 Tell the user:
 - whether the issue requirements were met
 - whether the issue was closed
 - what was implemented
 - what tests and checks passed
-- what CodeRabbit flagged and how it was handled; or that it timed out (>25 min) and was skipped; or that it was skipped and why
+- what CodeRabbit flagged and how it was handled; or that it timed out (>25 min) and review did not complete; or that it was skipped and why
 - what grilling surfaced (or that it was skipped and why)
 - whether any out-of-scope problem needs a new issue
