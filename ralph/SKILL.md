@@ -57,7 +57,11 @@ Leave all changes **uncommitted**.
 coderabbit review --agent --type uncommitted
 ```
 
-Wait for it to complete. Parse the structured findings output.
+**CodeRabbit review typically takes 10–20 minutes.** Run this command in the background and use Monitor to watch for completion. Do not set a timeout shorter than 25 minutes. Do not poll in a loop that gives up early — wait for the process to signal completion.
+
+If CodeRabbit completes within 25 minutes: parse the structured findings output and apply them as described below.
+
+If CodeRabbit does not complete within 25 minutes: do not abort the run. Continue to Step 5 immediately, but record `CodeRabbit: timed out — review did not complete` in the Step 6 acceptance audit and Step 9 final report.
 
 ### Apply findings
 
@@ -91,6 +95,7 @@ Produce a short checklist mapping each requirement to concrete evidence:
 - tests added or updated
 - commands run and their results
 - manual verification, if relevant
+- CodeRabbit: completed and findings applied, timed out, or skipped (with reason)
 
 Decision:
 - If every requirement is met, continue to commit and close the issue.
@@ -141,6 +146,6 @@ Tell the user:
 - whether the issue was closed
 - what was implemented
 - what tests and checks passed
-- what CodeRabbit flagged and how it was handled (or that it was skipped and why)
+- what CodeRabbit flagged and how it was handled; or that it timed out (>25 min) and was skipped; or that it was skipped and why
 - what grilling surfaced (or that it was skipped and why)
 - whether any out-of-scope problem needs a new issue
