@@ -1,6 +1,6 @@
 ---
 name: ralph
-description: Autonomous dev loop — picks the next ready-for-agent GitHub issue, implements it on the current branch using TDD, runs CodeRabbit CLI review on uncommitted changes, applies findings, grills the design, verifies the issue requirements, commits, and closes the issue when satisfied.
+description: Autonomous dev loop — picks the next ready-for-agent GitHub issue, implements it, and closes it when satisfied. Conditionally applies TDD, CodeRabbit review, and design grilling based on the nature of the issue.
 triggers: ["/ralph", "run ralph", "ralph loop", "autonomous dev loop"]
 ---
 
@@ -24,13 +24,34 @@ Announce the issue number and title. Briefly explain why it is the logical next 
 
 Before writing a line of code, read the relevant files. Understand existing patterns, naming conventions, and architecture decisions (check ADRs in docs/adr/ if present). Do not introduce abstractions that do not already exist.
 
-## Step 3 — Implement with TDD
+## Step 2b — Plan the run
 
-Read ~/.agents/skills/tdd/SKILL.md and follow those instructions verbatim, applied to the issue's requirement: red → green → refactor.
+After understanding the issue and the codebase, decide which optional steps you will run. State your decision explicitly before proceeding:
+
+**TDD** — mandatory for features and bug fixes. Skip for pure cleanup (deleting unused files, renaming, docs, config-only changes). Use judgment for everything else: apply TDD when tests would meaningfully increase confidence in the change.
+
+**CodeRabbit review** — mandatory when production code is added or modified. Skip when there are no code changes (docs-only, config-only, file deletions with no logic). Use judgment for test-only changes.
+
+**Design grilling** — mandatory when the change involves new abstractions or multiple valid design approaches. Skip for mechanical changes (deleting files, trivial bug fixes, pure config). Use judgment for everything else: grill when design decisions could go more than one way.
+
+For each step you are skipping, print one line explaining why. Do not open the corresponding skill file — only fetch it if you will actually use it.
+
+Example output:
+> - TDD: skipping — this is a file cleanup with no logic changes.
+> - CodeRabbit: running — production code is being modified.
+> - Grilling: skipping — the change is mechanical with no design decisions.
+
+## Step 3 — Implement
+
+If TDD was decided: read `~/.agents/skills/tdd/SKILL.md` and follow those instructions verbatim, applied to the issue's requirement: red → green → refactor.
+
+If TDD was skipped: implement the change directly, following existing patterns.
 
 Leave all changes **uncommitted**.
 
 ## Step 4 — CodeRabbit review
+
+*Skip this step entirely if CodeRabbit was decided off in Step 2b.*
 
 ```
 coderabbit review --agent --type uncommitted
@@ -38,24 +59,26 @@ coderabbit review --agent --type uncommitted
 
 Wait for it to complete. Parse the structured findings output.
 
-## Step 5 — Apply findings
+### Apply findings
 
 For each finding decide:
 - **Issue / bug**: always fix.
 - **Nitpick**: apply if it improves correctness, safety, or readability; skip if purely cosmetic and you disagree.
 - **Suggestion**: apply if it aligns with existing architecture; skip with a short note if it conflicts.
 
-After applying fixes, run the review again to confirm the findings are resolved:
+If the first run returned zero findings, skip the confirmation run. Otherwise, after applying fixes, run once more to confirm they are resolved:
 
 ```
 coderabbit review --agent --type uncommitted
 ```
 
-## Step 6 — Grill the design
+## Step 5 — Grill the design
 
-Read ~/.agents/skills/grill-me/SKILL.md and follow those instructions verbatim, applied to your implementation. Interview yourself (and the user if needed) relentlessly about every design decision, edge case, and assumption. Resolve every open branch before proceeding.
+*Skip this step entirely if grilling was decided off in Step 2b.*
 
-## Step 7 — Acceptance audit
+Read `~/.agents/skills/grill-me/SKILL.md` and follow those instructions verbatim, applied to your implementation. Interview yourself (and the user if needed) relentlessly about every design decision, edge case, and assumption. Resolve every open branch before proceeding.
+
+## Step 6 — Acceptance audit
 
 Before committing, audit the implementation against the issue contract.
 
@@ -75,9 +98,9 @@ Decision:
 - If a requirement cannot be met in this run, do **not** commit or close the issue. Report the unmet requirement, the blocker, current worktree state, and the next action needed.
 - If the implementation reveals an out-of-scope problem, decide whether it needs a new issue. Do not expand the current issue unless it is necessary to satisfy the original requirements.
 
-## Step 8 — Commit
+## Step 7 — Commit
 
-Once grilling is complete and all concerns are addressed:
+Once all active steps are complete and all concerns are addressed:
 - Stage the relevant files (no .env, no secrets, no unrelated changes)
 - Commit with a message that explains **why**, not just what
 
@@ -90,7 +113,7 @@ EOF
 )"
 ```
 
-## Step 9 — Close the issue
+## Step 8 — Close the issue
 
 Close the issue only after the acceptance audit passes and the commit succeeds.
 
@@ -111,13 +134,13 @@ EOF
 )"
 ```
 
-## Step 10 — Final report
+## Step 9 — Final report
 
 Tell the user:
 - whether the issue requirements were met
 - whether the issue was closed
 - what was implemented
 - what tests and checks passed
-- what CodeRabbit flagged and how it was handled
-- what grilling surfaced
+- what CodeRabbit flagged and how it was handled (or that it was skipped and why)
+- what grilling surfaced (or that it was skipped and why)
 - whether any out-of-scope problem needs a new issue
