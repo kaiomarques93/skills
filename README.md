@@ -12,7 +12,7 @@ Each skill lives in its own directory with a `SKILL.md` file. The agent reads th
 | [guide](./guide/) | Guides the user step-by-step through any unfamiliar procedure (AWS, Play Store, App Store, Terraform, etc.), reading the codebase for context, waiting for confirmation before each step, and troubleshooting inline when something fails. | `guide me through`, `walk me through`, `step by step`, `teach me how to` |
 | [ralph](./ralph/) | Autonomous dev loop — picks the next ready-for-agent GitHub issue, implements it with TDD, runs a CodeRabbit review, applies findings, grills the design, verifies requirements, commits, and closes the issue when satisfied. | `/ralph`, `run ralph`, `ralph loop`, `autonomous dev loop` |
 | [ship-it](./ship-it/) | Audits the implementation against the agreed requirements, optionally commits, and closes the GitHub issue with a structured comment. | `ship this`, `ship it`, `wrap this up`, `close this issue`, `audit and close` |
-| [to-review](./to-review/) | Publishes an integration-review issue for a batch of slice issues — defines upfront integration intent, links architecture docs, and gates the batch until slices are verified together. Run after `/to-issues`. | `/to-review`, `integration review`, `batch review`, `verify slices fit together` |
+| [to-review](./to-review/) | Publishes an integration-review issue for a batch of slice issues — defines upfront integration intent, links architecture docs, and gates the batch until slices are verified together. Run after `to-issues`. | `to-review`, `integration review`, `batch review`, `verify slices fit together` |
 
 ## Installation
 

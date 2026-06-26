@@ -1,16 +1,20 @@
 ---
 name: to-review
-description: Publish an integration-review issue for a batch of slice issues — defines upfront integration intent, links big-picture docs, and gates the batch until slices are verified together. Use after /to-issues, when the user says /to-review, integration review, batch review, or verify slices fit together.
+description: Publish an integration-review issue for a batch of slice issues — defines upfront integration intent, links big-picture docs, and gates the batch until slices are verified together. Use after to-issues, when the user says to-review, integration review, batch review, or verify slices fit together.
 disable-model-invocation: true
 ---
 
 # To Review
 
-Publish an **integration review issue** for a batch of slice issues. Run this right after `/to-issues`, before agents implement the slices.
+Publish an **integration review issue** for a batch of slice issues. Run this right after `to-issues` (`~/.agents/skills/to-issues/SKILL.md`), before agents implement the slices.
 
 This skill does **not** run the audit. It plans the audit: integration intent, architecture anchors, slice inventory, and blocking relationships. An AFK agent (or you) works the review issue once the slices are closed.
 
-The issue tracker and triage label vocabulary should have been provided to you — run `/setup-matt-pocock-skills` if not.
+The issue tracker and triage label vocabulary should have been provided to you — read `~/.agents/skills/setup-matt-pocock-skills/SKILL.md` if not.
+
+## Skill paths
+
+Related skills live at `~/.agents/skills/<name>/SKILL.md`. How you invoke them depends on the tool (`/to-issues` in Cursor, `$to-issues` in Codex, etc.) — when this skill tells you to use another skill, **read the file path**, not a particular invocation syntax.
 
 ## Process
 
@@ -142,7 +146,7 @@ After approval, act on each disposition:
 - **absorb** — Comment on the target issue with what to fold in.
 - **dismiss** — Record in this issue's closing comment only.
 
-Use the same issue body style as `/to-issues` slices (What to build, Acceptance criteria, Blocked by) for **new-issue** items.
+Use the same issue body style as `to-issues` slices (`~/.agents/skills/to-issues/SKILL.md` — What to build, Acceptance criteria, Blocked by) for **new-issue** items.
 
 ### PRD closure
 
@@ -208,7 +212,7 @@ Apply the `ready-for-human` triage label.
 
 ## Rules
 
-- Do **not** modify `/to-issues` slice issues beyond the cross-link comment in step 5.
+- Do **not** modify `to-issues` slice issues beyond the cross-link comment in step 5.
 - Do **not** close slice issues or the parent PRD when publishing the review issue.
 - Do **not** run the integration audit in this session — only publish the review issue.
-- When working the review issue later, read `ship-it` for the close workflow after acceptance criteria are met.
+- When working the review issue later, read `~/.agents/skills/ship-it/SKILL.md` for the close workflow after acceptance criteria are met.
