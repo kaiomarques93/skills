@@ -119,34 +119,52 @@ This issue is blocked until every issue listed under **Blocked by** is closed. W
 
 ### Integration audit
 
-1. **Slice audit** — For each slice in **Slice inventory**, verify acceptance criteria against code, tests, and the slice's closing comment.
+1. **Slice audit** — For each slice in **Slice inventory**, verify acceptance criteria against code, tests, docs, migrations, and the slice's closing comment (see `~/.agents/skills/ship-it/SKILL.md` format).
 2. **Integration audit** — Verify every scenario under **Integration intent** against the combined codebase. Run relevant tests or commands.
 3. **Architecture audit** — Confirm **Architectural invariants** and **Architecture anchors** still hold in the implementation.
-4. **Follow-up mining** — Read every slice's closing comment. Extract anything listed under "Follow-up issues" or described as out-of-scope / deferred. Nothing stays buried in comments.
+4. **Follow-up mining** — For each slice, read the full comment thread and closing comment. Extract every follow-up, deferred item, CodeRabbit skip, and out-of-scope note. See **Follow-up mining rules** below.
+
+#### Follow-up mining rules
+
+- Parse the **Follow-up issues** section of each slice's ship-it closing comment.
+- **Contradiction flag** — If a slice says `None` (or "none from this slice") but the same bullet or comment describes deferred work, treat it as an undocumented follow-up and disposition it.
+- **Vague deferral flag** — If deferred work does not name a target issue (`#N`), PRD section, or ADR, disposition it (usually **new-issue** `ready-for-human` or **absorb** into an open issue).
+- **Cross-check** — If a slice deferred work to another issue in **Slice inventory**, verify that issue's implementation and closing comment actually addressed it.
+- **Code vs comments** — If the combined codebase reveals gaps not mentioned in any slice closing comment, disposition those too. Do not rely on comments alone.
+
+### AFK workflow (required)
+
+This issue is labeled `ready-for-agent`. Complete it **autonomously** — do not stop to ask for human approval on findings or dispositions.
+
+Work in this order:
+
+1. Run the integration audit above.
+2. **Disposition** every finding using the table below. Decide yourself; record rationale in your working notes.
+3. **Publish follow-ups** — act on each disposition **before** closing this issue (step 4).
+4. **PRD closure** (if **Parent** exists) — close the PRD via ship-it when high confidence; otherwise create a **PRD closure review** issue (`ready-for-human`) and leave the PRD open.
+5. **Close this issue** — always read `~/.agents/skills/ship-it/SKILL.md` and close this issue. An integration review is an audit gate, not a container for open work. Open work lives in newly created issues.
+
+**Never** leave this issue open with a "please approve" or "waiting for confirmation" comment.
 
 ### Follow-up disposition
 
-For each finding, assign exactly one disposition and present the full list to the user for approval before creating issues or closing this issue:
+For each finding, assign exactly one disposition:
 
 | Disposition | When to use |
 |-------------|-------------|
-| **new-issue** | Needs tracked work |
-| **defer** | Intentionally postponed — record where (PRD Out of Scope, ADR, backlog) and why |
-| **absorb** | Fold into an existing open issue — link it |
-| **dismiss** | Not actionable — record why |
-
-Ask the user to approve the disposition list. Iterate if they disagree.
+| **new-issue** | Needs tracked work — create an issue before closing this review |
+| **defer** | Intentionally postponed and already covered by PRD Out of Scope, an ADR, or a named future milestone — record where and why; no issue needed |
+| **absorb** | Fold into an existing open issue — comment on that issue with what to add |
+| **dismiss** | Not actionable after cross-check — record why in this issue's closing comment |
 
 ### Publish follow-ups
 
-After approval, act on each disposition:
+Act on each disposition **before** closing this issue:
 
-- **new-issue** — Create an issue. Label `ready-for-agent` for clear implementation work; `ready-for-human` for design ambiguity or product decisions.
-- **defer** — Add a comment to the relevant anchor doc or PRD; do not create an issue.
+- **new-issue** — Create an issue. Label `ready-for-agent` for clear implementation work; `ready-for-human` for design ambiguity or product decisions. Use the same body style as `to-issues` slices (`~/.agents/skills/to-issues/SKILL.md` — What to build, Acceptance criteria, Blocked by). Reference this review issue and the originating slice in the new issue body.
+- **defer** — Record in this issue's ship-it closing comment (and the PRD closing comment if closing the PRD). Do not create an issue.
 - **absorb** — Comment on the target issue with what to fold in.
-- **dismiss** — Record in this issue's closing comment only.
-
-Use the same issue body style as `to-issues` slices (`~/.agents/skills/to-issues/SKILL.md` — What to build, Acceptance criteria, Blocked by) for **new-issue** items.
+- **dismiss** — Record in this issue's ship-it closing comment only.
 
 ### PRD closure
 
@@ -154,18 +172,18 @@ Use the same issue body style as `to-issues` slices (`~/.agents/skills/to-issues
 
 Audit the PRD's user stories and acceptance against the combined implementation.
 
-- **High confidence** every in-scope story is met and no blocking doubts remain → close the PRD issue with an audit comment.
-- **Any ambiguity** — leave the PRD open. Create a **PRD closure review** issue (`ready-for-human`) listing open questions. Do not close the PRD until that issue is resolved.
+- **High confidence** every in-scope story is met and no blocking doubts remain → close the PRD via `~/.agents/skills/ship-it/SKILL.md` with an audit comment. List any **defer** items and new issue numbers in the PRD closing comment.
+- **Any ambiguity** — leave the PRD open. Create a **PRD closure review** issue (`ready-for-human`) listing open questions. Close **this** review issue anyway.
 
 ## Acceptance criteria
 
 - [ ] Every slice in **Slice inventory** audited against its spec and closing comment
-- [ ] Every **Integration intent** scenario verified (or gap recorded as follow-up)
+- [ ] Every **Integration intent** scenario verified, or gap recorded as follow-up
 - [ ] **Architectural invariants** checked against the codebase
-- [ ] Follow-ups mined from slice closing comments and dispositioned
-- [ ] User approved the disposition list
+- [ ] Follow-ups mined (including contradiction and vague-deferral flags) and dispositioned
 - [ ] All **new-issue** follow-ups published with correct triage labels
-- [ ] PRD closed (high confidence) OR PRD closure review issue created (`ready-for-human`)
+- [ ] PRD closed via ship-it (high confidence) OR PRD closure review issue created (`ready-for-human`)
+- [ ] **This issue closed** via ship-it — always, regardless of follow-ups created
 
 ## Blocked by
 
@@ -215,4 +233,4 @@ Apply the `ready-for-human` triage label.
 - Do **not** modify `to-issues` slice issues beyond the cross-link comment in step 5.
 - Do **not** close slice issues or the parent PRD when publishing the review issue.
 - Do **not** run the integration audit in this session — only publish the review issue.
-- When working the review issue later, read `~/.agents/skills/ship-it/SKILL.md` for the close workflow after acceptance criteria are met.
+- Integration review issues are always `ready-for-agent` — the issue body's **AFK workflow** requires autonomous completion; see `~/.agents/skills/ship-it/SKILL.md` when closing.
