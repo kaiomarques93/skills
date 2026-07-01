@@ -13,6 +13,7 @@ Each skill lives in its own directory with a `SKILL.md` file. The agent reads th
 | [ralph](./ralph/) | Autonomous dev loop — picks the next ready-for-agent GitHub issue, implements it with TDD, runs a CodeRabbit review, applies findings, grills the design, verifies requirements, commits, and closes the issue when satisfied. | `/ralph`, `run ralph`, `ralph loop`, `autonomous dev loop` |
 | [ship-it](./ship-it/) | Audits the implementation against the agreed requirements, optionally commits, and closes the GitHub issue with a structured comment. | `ship this`, `ship it`, `wrap this up`, `close this issue`, `audit and close` |
 | [to-review](./to-review/) | Publishes an integration-review issue for a batch of slice issues — defines upfront integration intent, links architecture docs, and gates the batch until slices are verified together. Run after `to-issues`. | `to-review`, `integration review`, `batch review`, `verify slices fit together` |
+| [rate-difficulty](./rate-difficulty/) | Rates `ready-for-agent` issues by implementation difficulty — applies `difficulty:*` labels, posts scored rationale comments, and suggests a Cursor agent model for manual delegation. | `/rate-difficulty`, `rate difficulty`, `difficulty rating`, `score issues by difficulty` |
 
 ## Installation
 
@@ -63,6 +64,8 @@ skills/
 │   └── SKILL.md
 ├── ship-it/
 │   └── SKILL.md
-└── to-review/
+├── to-review/
+│   └── SKILL.md
+└── rate-difficulty/
     └── SKILL.md
 ```
