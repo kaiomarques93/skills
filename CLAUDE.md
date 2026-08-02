@@ -24,7 +24,7 @@ Each skill is a directory with a `SKILL.md` file, plus optional bundled resource
 └── references/   ← optional supporting files (progressive disclosure)
 ```
 
-Skills may be nested in grouping folders (the CLI discovers `SKILL.md` at any depth). Skills distilled from *Fundamentals of Software Architecture* live under `architecture/` — see `architecture/README.md` for the method before adding chapter skills there.
+Skill directories must sit at the **repo root** — the CLI only discovers top-level `SKILL.md` dirs, so never nest a skill inside a grouping folder. Related skills are grouped by name prefix instead (e.g. `arch-*` for the *Fundamentals of Software Architecture* family — read `architecture/README.md` for the method before adding chapter skills).
 
 ### Required frontmatter fields
 

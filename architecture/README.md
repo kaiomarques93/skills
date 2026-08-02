@@ -2,6 +2,8 @@
 
 Skills distilled from *Fundamentals of Software Architecture* (Mark Richards & Neal Ford), organized so the book's knowledge is usable on real projects — both greenfield and brownfield.
 
+> The skill directories themselves live at the **repo root** with an `arch-` prefix (the `skills` CLI only discovers top-level `SKILL.md` dirs). This folder holds the method and the chapter map.
+
 ## The method
 
 Each chapter's knowledge is used at three different **moments**, and the skills are organized by moment of use — not by the book's table of contents:
@@ -22,7 +24,7 @@ This separation means the theory is written once, audits are reproducible (numbe
 
 | Book chapter | Skill(s) | Status |
 |---|---|---|
-| Ch. 3 — Modularity (cohesion, coupling, connascence) | [arch-modularity](./arch-modularity/), [arch-calibrate](./arch-calibrate/) | ✅ |
+| Ch. 3 — Modularity (cohesion, coupling, connascence) | [arch-modularity](../arch-modularity/), [arch-calibrate](../arch-calibrate/) | ✅ |
 | Ch. 4–5 — Architecture characteristics | `arch-characteristics` (planned) | — |
 | Ch. 6 — Measuring & governing (fitness functions) | extend `arch-calibrate` (planned) | — |
 | Ch. 7+ — Components, styles, … | TBD | — |
