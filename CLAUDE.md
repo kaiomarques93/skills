@@ -16,12 +16,15 @@ The `skills` CLI (`npm: skills`) auto-discovers skills by scanning for `SKILL.md
 
 ## Skill Structure
 
-Each skill is a directory with a single `SKILL.md` file:
+Each skill is a directory with a `SKILL.md` file, plus optional bundled resources (`references/`, `scripts/`, `assets/`) referenced from the body:
 
 ```
 <skill-name>/
-└── SKILL.md   ← YAML frontmatter + agent instructions
+├── SKILL.md      ← YAML frontmatter + agent instructions
+└── references/   ← optional supporting files (progressive disclosure)
 ```
+
+Skills may be nested in grouping folders (the CLI discovers `SKILL.md` at any depth). Skills distilled from *Fundamentals of Software Architecture* live under `architecture/` — see `architecture/README.md` for the method before adding chapter skills there.
 
 ### Required frontmatter fields
 

@@ -14,6 +14,9 @@ Each skill lives in its own directory with a `SKILL.md` file. The agent reads th
 | [ship-it](./ship-it/) | Audits the implementation against the agreed requirements, optionally commits, and closes the GitHub issue with a structured comment. | `ship this`, `ship it`, `wrap this up`, `close this issue`, `audit and close` |
 | [to-review](./to-review/) | Publishes an integration-review issue for a batch of slice issues — defines upfront integration intent, links architecture docs, and gates the batch until slices are verified together. Run after `to-issues`. | `to-review`, `integration review`, `batch review`, `verify slices fit together` |
 | [rate-difficulty](./rate-difficulty/) | Rates `ready-for-agent` issues by implementation difficulty — applies `difficulty:*` labels, posts scored rationale comments, and suggests a Cursor agent model for manual delegation. | `/rate-difficulty`, `rate difficulty`, `difficulty rating`, `score issues by difficulty` |
+| [vps-backend-issues](./vps-backend-issues/) | Launches a detached, autonomous Claude orchestration batch for specified langU backend issues on the VPS and returns monitoring commands. | `/vps-backend-issues`, `vps backend issues`, `solve these issues on the vps`, `delegate issues to claude` |
+| [arch-modularity](./architecture/arch-modularity/) | Audits modularity of existing code (cohesion, coupling, connascence) with a prioritized refactor plan, or reviews a proposed greenfield decomposition. From *Fundamentals of Software Architecture* ch. 3. | `modularity`, `check cohesion`, `coupling analysis`, `connascence`, `main sequence` |
+| [arch-calibrate](./architecture/arch-calibrate/) | Run once per project — maps each architecture metric (LCOM, I, A, D) to a deterministic language-specific measurement and writes the recipe into the target repo. | `calibrate architecture metrics`, `set up architecture metrics`, `how do we measure modularity here` |
 
 ## Installation
 
@@ -56,6 +59,13 @@ See Cursor's [skill authoring guide](https://cursor.com/docs/context/skills) for
 ```
 skills/
 ├── README.md
+├── architecture/          ← skills from Fundamentals of Software Architecture (see its README)
+│   ├── README.md
+│   ├── arch-modularity/
+│   │   ├── SKILL.md
+│   │   └── references/
+│   └── arch-calibrate/
+│       └── SKILL.md
 ├── crap-analysis/
 │   └── SKILL.md
 ├── guide/
@@ -66,6 +76,10 @@ skills/
 │   └── SKILL.md
 ├── to-review/
 │   └── SKILL.md
+├── vps-backend-issues/
+│   ├── SKILL.md
+│   ├── assets/
+│   └── scripts/
 └── rate-difficulty/
     └── SKILL.md
 ```
