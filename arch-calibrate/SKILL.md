@@ -18,7 +18,9 @@ The Martin metrics (Ca/Ce/I/A/D) are per-component. Decide with the user what a 
 
 ## Step 3 — Choose a measurement per metric
 
-For each metric pick, in order of preference: **(a)** an off-the-shelf tool, **(b)** a small generated script committed to the repo, **(c)** a documented manual heuristic. Record which tier each metric got — audits must label numbers `measured`, `scripted`, or `estimated` accordingly.
+**First check what the repo already has.** Search for existing metric/governance tooling (cycle checkers, baseline files, custom lint rules, metrics scripts — try `ls scripts/`, grep for "cycle"/"baseline"/"metrics") and adopt it as the authoritative measurement for whatever it covers. A generic tool measuring a subtly different thing is a trap: file-level cycle detection (madge) can report zero cycles while the project's own module-level checker tracks a baseline of six. Record any such granularity difference in the calibration file.
+
+For each remaining metric pick, in order of preference: **(a)** the project's existing tooling, **(b)** an off-the-shelf tool, **(c)** a small generated script committed to the repo, **(d)** a documented manual heuristic. Record which tier each metric got — audits must label numbers `measured`, `scripted`, or `estimated` accordingly.
 
 Starting points per stack:
 

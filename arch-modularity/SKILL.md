@@ -36,6 +36,15 @@ Agree on the unit of analysis: which directories/packages are the "components", 
 
 1. Look for `docs/architecture/calibration.md` in the target project. If present, run the commands it lists for each metric and mark results **measured**.
 2. If absent, estimate from reading the code (imports for Ca/Ce, class shape for LCOM) and mark results **estimated**. Suggest running `arch-calibrate` at the end of the report.
+3. **Prefer the project's own governance tooling over generic measurements.** If the repo has its own cycle checkers, baselines, lint rules, or metric scripts, they are authoritative — a generic tool can silently measure something different (e.g., file-level cycle detection reports "no cycles" while the project's module-level baseline tracks six). Reconcile disagreements before reporting, never alongside.
+
+### Step 2b — Cross-reference the issue tracker
+
+Before writing any finding, list the project's open issues (e.g. `gh issue list`) and check each candidate finding against them. Prior audits, review bots, and "module steward" passes often found the same things:
+
+- Finding already tracked → **update that issue** with your new evidence (metrics, wider scope) instead of duplicating it; note the reference in your report.
+- Finding partially tracked → new finding references the existing issue and states exactly what it adds.
+- Existing issue contradicts your finding → investigate before reporting; the tracker often encodes intent (an "asymmetry" may be a documented design decision).
 
 ### Step 3 — Cohesion per module
 
@@ -54,6 +63,10 @@ Scan the scoped code for each connascence type (checklist in `references/connasc
 Rank findings by severity: **strength rank × locality × degree** (exact scoring in `references/connascence.md`). Strong + cross-component + high-degree comes first. Every entry must name its concrete fix as a *downgrade* (e.g., position → name via named parameters; meaning → name via a constant; dynamic → static via explicit orchestration).
 
 ### Step 7 — Report
+
+Ask the user where findings should land: a Markdown report, or **tickets on the project's tracker** (via their ticketing skill/flow if they have one). When publishing as tickets: respect the project's label vocabulary, milestones, and project-board fields (status/priority/horizon); keep refactor tickets off any release-critical path unless a finding genuinely gates the release — then flag it as a candidate and let the user decide.
+
+Report format (also the ticket-content source):
 
 ```markdown
 ## Modularity Audit — <scope>
